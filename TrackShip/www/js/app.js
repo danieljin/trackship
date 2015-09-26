@@ -38,6 +38,10 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
     .state('subscriptions', {
       url: "/projects/:project_id/subscriptions",
       templateUrl: "templates/subscriptions.html"
+    })
+    .state('material', {
+      url: "/subscription/:subscription_id",
+      templateUrl: "templates/material.html"
     });
   $urlRouterProvider.otherwise("/landing");
 
