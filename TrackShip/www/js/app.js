@@ -26,6 +26,22 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
     .state('push', {
       url: "/push",
       templateUrl: "templates/push.html"
+    })
+    .state('newproject', {
+      url: "/projects/new",
+      templateUrl: "templates/new-project.html"
+    })
+    .state('joinproject', {
+      url: "/projects/join",
+      templateUrl: "templates/join-project.html"
+    })
+    .state('subscriptions', {
+      url: "/projects/:project_id/subscriptions",
+      templateUrl: "templates/subscriptions.html"
+    })
+    .state('material', {
+      url: "/subscription/:subscription_id",
+      templateUrl: "templates/material.html"
     });
   $urlRouterProvider.otherwise("/push");
 
