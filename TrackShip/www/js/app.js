@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('trackship', ['ionic', 'trackship.controllers'])
+angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','ngCordova', 'trackship.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,6 +22,10 @@ angular.module('trackship', ['ionic', 'trackship.controllers'])
     .state('landing', {
       url: "/landing",
       templateUrl: "templates/landing.html"
+    })
+    .state('push', {
+      url: "/push",
+      templateUrl: "templates/push.html"
     });
   $urlRouterProvider.otherwise("/landing");
 
