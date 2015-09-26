@@ -17,7 +17,9 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
     }
   });
 })
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
+  $ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.navBar.alignTitle('center');
   $stateProvider
     .state('landing', {
       url: "/landing",
@@ -43,6 +45,6 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
       url: "/subscription/:subscription_id",
       templateUrl: "templates/material.html"
     });
-  $urlRouterProvider.otherwise("/landing");
+    $urlRouterProvider.otherwise("/landing");
 
 });
