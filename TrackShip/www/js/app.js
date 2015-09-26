@@ -43,6 +43,6 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
       url: "/subscription/:subscription_id",
       templateUrl: "templates/material.html"
     });
-  $urlRouterProvider.otherwise("/push");
+  $urlRouterProvider.otherwise("/landing");
 
 });
