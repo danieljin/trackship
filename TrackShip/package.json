@@ -15,11 +15,7 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "com.ionic.keyboard",
-    {
-      "locator": "https://github.com/phonegap/phonegap-plugin-push",
-      "id": "phonegap-plugin-push"
-    }
+    "com.ionic.keyboard"
   ],
   "cordovaPlatforms": [
     "ios"

@@ -1,8 +1,12 @@
-<ion-content scroll="false">
-  <button class="button button-block button-dark" ng-click="identifyUser()">
-    Identify a user
-  </button>
-  <button class="button button-block button-positive" ng-if="identified" ng-click="pushRegister()">
-    Register for Push
-  </button>
-</ion-content>
+<ion-view title="Welcome" hide-back-button="true">
+  <ion-content scroll="false">
+    <ion-pane scroll="false">
+      <button class="button button-block button-dark" ng-click="identifyUser()">
+        Identify a user
+      </button>
+      <button class="button button-block button-positive" ng-if="identified" ng-click="pushRegister()">
+        Register for Push
+      </button>
+    </ion-pane>
+  </ion-content>
+</ion-view>

@@ -27,6 +27,6 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
       url: "/push",
       templateUrl: "templates/push.html"
     });
-  $urlRouterProvider.otherwise("/landing");
+  $urlRouterProvider.otherwise("/push");
 
 });
