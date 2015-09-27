@@ -34,19 +34,33 @@ angular.module('trackship.controllers', [])
       $log.info('Ionic Push: Got token ', data.token, data.platform);
       $scope.token = data.token;
 
+      $scope.refreshNotifications();
+    });
+
+    $rootScope.$on('projects-update', function() {
+      $scope.refreshProjects();
+    });
+
+    $scope.refreshNotifications = function() {
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
+
       $http({
         url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
       }).
       success(function(data, status, headers, config) {
         $scope.notifications = data;
-        $rootScope.$emit('projects-update');
+        $ionicLoading.hide();
+        return true;
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
+        $ionicLoading.hide();
       });
-    });
+    }
 
-    $rootScope.$on('projects-update', function() {
+    $scope.refreshProjects = function() {
       $ionicLoading.show({
         template: 'Loading...'
       });
@@ -59,8 +73,9 @@ angular.module('trackship.controllers', [])
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
+        $ionicLoading.hide();
       });
-    });
+    }
 
     $scope.removeProject = function(id) {
       $ionicLoading.show({
@@ -86,6 +101,7 @@ angular.module('trackship.controllers', [])
         $rootScope.$emit('projects-update');
       }).
       error(function(data, status, headers, config) {
+        $ionicLoading.hide();
         alert(JSON.stringify(data));
       });
     }
@@ -199,6 +215,7 @@ angular.module('trackship.controllers', [])
         $ionicLoading.hide();
       }).
       error(function(data, status, headers, config) {
+        $ionicLoading.hide();
         alert(JSON.stringify(data));
       });
     });

@@ -1,11 +1,13 @@
 <ion-view title="TrackShip" hide-back-button="true">
   <ion-content scroll="false">
     <ion-tabs class="tabs-positive tabs-icon-only">
-      <ion-tab title="Notifications" icon-on="ion-ios-bell" icon-off="ion-ios-bell-outline">
+      <ion-tab title="Notifications" icon-on="ion-ios-bell" icon-off="ion-ios-bell-outline" on-select="refreshNotifications()">
         <ion-content scroll="true">
           <div class="list card">
-            <div class="item item-divider">
-              Notifications
+            <div class="item item-divider">Notifications
+                <a href="#" ng-click="refreshNotifications()" class="item-icon-right">
+                    <i class="icon ion-refresh"></i>
+                </a>
             </div>
             <ion-item ng-if="notifications.length == 0">
               There are no notifications at this time.
@@ -17,7 +19,7 @@
         </ion-content>
       </ion-tab>
 
-      <ion-tab title="Subscriptions" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline">
+      <ion-tab title="Subscriptions" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" on-select="refreshProjects()">
         <ion-content scroll="true">
           <div class="list card">
             <div class="item item-divider">
