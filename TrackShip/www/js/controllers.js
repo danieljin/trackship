@@ -18,6 +18,18 @@ angular.module('trackship.controllers', [])
     error(function(data, status, headers, config) {
       alert(data);
     });
+
+    $http({
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
+    }).
+    success(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+      $scope.notificationHistory = data;
+    }).
+    error(function(data, status, headers, config) {
+      alert(data);
+    });
+
   });
 
   $log.info('Ionic User: Identifying with Ionic User service');
