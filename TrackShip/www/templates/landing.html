@@ -3,11 +3,11 @@
     <ion-tabs class="tabs-positive tabs-icon-only">
       <ion-tab title="Notifications" icon-on="ion-ios-bell" icon-off="ion-ios-bell-outline" on-select="refreshNotifications()">
         <ion-content scroll="true">
+          <ion-refresher pulling-text="Pull to refresh" on-refresh="refreshNotificationsPull()">
+          </ion-refresher>
           <div class="list card">
-            <div class="item item-divider">Notifications
-                <a href="#" ng-click="refreshNotifications()" class="item-icon-right">
-                    <i class="icon ion-refresh"></i>
-                </a>
+            <div class="item item-divider">
+              Notifications
             </div>
             <ion-item ng-if="notifications.length == 0">
               There are no notifications at this time.
@@ -21,6 +21,8 @@
 
       <ion-tab title="Subscriptions" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline" on-select="refreshProjects()">
         <ion-content scroll="true">
+          <ion-refresher pulling-text="Pull to refresh" on-refresh="refreshProjectsPull()">
+          </ion-refresher>
           <div class="list card">
             <div class="item item-divider">
               New Subscriptions

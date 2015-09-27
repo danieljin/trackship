@@ -1,5 +1,5 @@
 angular.module('trackship.controllers', [])
-  .controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal, $ionicPopup) {
+  .controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal, $ionicPopup, $ionicPlatform) {
     $ionicLoading.show({
       template: 'Loading...'
     });
@@ -30,6 +30,11 @@ angular.module('trackship.controllers', [])
       });
     });
 
+    $ionicPlatform.on('resume', function(){
+      $scope.refreshNotifications();
+      $scope.refreshProjects();
+    });
+
     // Handles incoming device tokens
     $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
       $log.info('Ionic Push: Got token ', data.token, data.platform);
@@ -53,7 +58,6 @@ angular.module('trackship.controllers', [])
       success(function(data, status, headers, config) {
         $scope.notifications = data;
         $ionicLoading.hide();
-        return true;
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -75,6 +79,38 @@ angular.module('trackship.controllers', [])
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
         $ionicLoading.hide();
+      });
+    }
+
+    $scope.refreshNotificationsPull = function() {
+      $http({
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
+      }).
+      success(function(data, status, headers, config) {
+        $scope.notifications = data;
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply();
+      }).
+      error(function(data, status, headers, config) {
+        alert(JSON.stringify(data));
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply();
+      });
+    }
+
+    $scope.refreshProjectsPull = function() {
+      $http({
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      }).
+      success(function(data, status, headers, config) {
+        $scope.projects = data;
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply();
+      }).
+      error(function(data, status, headers, config) {
+        alert(JSON.stringify(data));
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply();
       });
     }
 
