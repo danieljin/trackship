@@ -1,5 +1,5 @@
 <ion-view title="TrackShip" hide-back-button="true">
-  <ion-content scroll="false">
+  <ion-content scroll="true">
     <ion-tabs class="tabs-positive tabs-icon-only">
       <ion-tab title="Notifications" icon-on="ion-ios-bell" icon-off="ion-ios-bell-outline">
         <ion-content scroll="false">
@@ -7,7 +7,7 @@
             <div class="item item-divider">
               Notifications
             </div>
-            <ion-item ng-repeat="notifcation in notifications">
+            <ion-item ng-repeat="notification in notifications">
               {{notification.message}}
             </ion-item>
           </div>

@@ -32,6 +32,25 @@ angular.module('trackship.controllers', [])
 
   });
 
+  $scope.$on('$locationChangeStart', function(event, next, current) {
+    if (next.match('/landing')) {
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
+
+      $http({
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      }).
+      success(function(data, status, headers, config) {
+        $scope.projects = data;
+        $ionicLoading.hide();
+      }).
+      error(function(data, status, headers, config) {
+        alert(data);
+      });
+    }
+  });
+
   $log.info('Ionic User: Identifying with Ionic User service');
 
   var user = $ionicUser.get();
@@ -152,7 +171,6 @@ angular.module('trackship.controllers', [])
       }
     }).
     success(function(data, status, headers, config) {
-      $scope.project = {};
       $http({
         method: 'POST',
         url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
@@ -162,16 +180,8 @@ angular.module('trackship.controllers', [])
         }
       }).
       success(function(data, status, headers, config) {
-        $http({
-          url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-        }).
-        success(function(data, status, headers, config) {
-          $scope.projects = data;
-          $location.path("/landing");
-        }).
-        error(function(data, status, headers, config) {
-          alert(data);
-        });
+        $scope.project = {};
+        $location.path("/landing");
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -206,16 +216,7 @@ angular.module('trackship.controllers', [])
     }).
     success(function(data, status, headers, config) {
       $scope.project = {};
-      $http({
-        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-      }).
-      success(function(data, status, headers, config) {
-        $scope.projects = data;
-        $location.path("/landing");
-      }).
-      error(function(data, status, headers, config) {
-        alert(data);
-      });
+      $location.path("/landing");
     }).
     error(function(data, status, headers, config) {
       alert('This project does not exist');
