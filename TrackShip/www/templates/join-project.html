@@ -2,18 +2,18 @@
   <ion-content scroll="false">
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" placeholder="Project ID">
+        <input type="text" placeholder="Project ID" ng-model="project.id" ng-change="toggleSubmit()">
         <a href="#" class="item-icon-right">
           <i class="icon ion-ios-camera-outline"></i>
         </a>
       </label>
       <br>
-      <a class="button button-block button-balanced">
+      <button ng-disabled="submit.disabled" ng-click="joinProject()" class="button button-block button-balanced">
         Join Project
-      </a>
-      <a href="#/landing" class="button button-block button-assertive">
+      </button>
+      <button ng-click="myGoBack()" class="button button-block button-assertive">
         Cancel
-      </a>
+      </button>
     </div>
-  </ion-content> 
+  </ion-content>
 </ion-view>

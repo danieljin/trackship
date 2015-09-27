@@ -1,5 +1,5 @@
 angular.module('trackship.controllers', [])
-.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $ionicHistory, $log, $http, $location) {
+.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log) {
   // Handles incoming device tokens
   $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
     alert("Successfully registered token " + data.token);
@@ -33,6 +33,8 @@ angular.module('trackship.controllers', [])
       }
     });
   });
+})
+.controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location) {
   $scope.project = {};
   $scope.submit = {disabled:true};
   $scope.myGoBack = function() {
@@ -46,16 +48,62 @@ angular.module('trackship.controllers', [])
     };
   }
   $scope.createProject = function() {
-    $http.post('http://ec2-54-237-22-83.compute-1.amazonaws.com/projects', {name:$scope.project.name}).
-      then(function(response) {
-        $http.post('http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects', {project_id:response.data.project_id}).
-          then(function(response) {
-            $location.path("/landing");
-          }, function(response) {
-            alert(response);
-          });
-      }, function(response) {
-        alert(response);
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/projects',
+      data: {name:$scope.project.name},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $http({
+        method: 'POST',
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+        data: {project_id:data.project_id},
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).
+      success(function(data, status, headers, config) {
+        $location.path("/landing");
+      }).
+      error(function(data, status, headers, config) {
+        alert(JSON.stringify(data));
+      });
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  };
+})
+.controller('JoinProjectCtrl', function($scope, $ionicHistory, $http, $location) {
+  $scope.project = {};
+  $scope.submit = {disabled:true};
+  $scope.myGoBack = function() {
+    $ionicHistory.goBack();
+  };
+  $scope.toggleSubmit = function() {
+    if ($scope.project.id.length > 0) {
+      $scope.submit.disabled = false;
+    } else {
+      $scope.submit.disabled = true;
+    };
+  }
+  $scope.joinProject = function() {
+      $http({
+        method: 'POST',
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+        data: {project_id:$scope.project.id},
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).
+      success(function(data, status, headers, config) {
+        $location.path("/landing");
+      }).
+      error(function(data, status, headers, config) {
+        alert('This project does not exist');
       });
   };
 });

@@ -31,10 +31,12 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
     })
     .state('newproject', {
       url: "/projects/new",
+      controller: "NewProjectCtrl",
       templateUrl: "templates/new-project.html",
     })
     .state('joinproject', {
       url: "/projects/join",
+      controller: "JoinProjectCtrl",
       templateUrl: "templates/join-project.html"
     })
     .state('subscriptions', {
