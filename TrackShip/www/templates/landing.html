@@ -7,9 +7,9 @@
             <div class="item item-divider">
               Notifications
             </div>
-            <a href="#" class="item item-icon-left">
-            This will be a list of notifications
-            </a>
+            <ion-item ng-repeat="notifcation in notifications">
+              {{notification.message}}
+            </ion-item>
           </div>
         </ion-content>
       </ion-tab>
