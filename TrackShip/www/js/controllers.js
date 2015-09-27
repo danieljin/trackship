@@ -24,7 +24,7 @@ angular.module('trackship.controllers', [])
     }).
     success(function(data, status, headers, config) {
       alert(JSON.stringify(data));
-      $scope.notificationHistory = data;
+      $scope.notifications = data;
     }).
     error(function(data, status, headers, config) {
       alert(data);
