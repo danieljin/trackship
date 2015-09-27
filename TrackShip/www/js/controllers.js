@@ -29,7 +29,7 @@ angular.module('trackship.controllers', [])
     });
   });
 
-  $rootScope.$on('project-added', function() {debugger;
+  $rootScope.$on('project-added', function() {
       $ionicLoading.show({
         template: 'Loading...'
       });
@@ -88,6 +88,27 @@ angular.module('trackship.controllers', [])
         modal.show();
         $scope.project_id = id;
       });
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  }
+
+  $scope.removeProject = function(id) {
+    $http({
+      method: 'DELETE',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      data: {project_id:id},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $ionicLoading.show({
+        template: 'Loading...',
+        duration: 500
+      });
+      $rootScope.$emit('project-added');
     }).
     error(function(data, status, headers, config) {
       alert(JSON.stringify(data));
