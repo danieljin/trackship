@@ -4,9 +4,12 @@
     <h1 class="title">Subscriptions</h1>
     <button class="button button-clear button-primary" ng-click="addMaterial()">Add</button>
   </ion-header-bar>
-  <ion-content class="padding">
+  <ion-content>
     <ion-list can-swipe="true">
-      <ion-item ng-repeat="material in materials" ng-class="{'disabled':!material.subscribed}" >
+      <ion-item ng-if="materials.length == 0">
+        There are no materials to subscribe to yet.
+      </ion-item>
+      <ion-item ng-if="materials.length > 0" ng-repeat="material in materials" ng-class="{'disabled':!material.subscribed}" >
         {{material.name}}
         <ion-option-button class="button-stable"
            ng-click="subscribeMaterial(material.id)" ng-if="!material.subscribed">
