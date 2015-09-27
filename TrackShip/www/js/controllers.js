@@ -62,9 +62,7 @@ angular.module('trackship.controllers', [])
       canPlaySound: true, //Can notifications play a sound?
       canRunActionsOnWake: true, //Can run actions outside the app,
       onNotification: function(notification) {
-        // Handle new push notifications here
-        // $log.info(notification);
-        return true;
+        alert(JSON.stringify(notification));
       }
     });
   });
