@@ -5,6 +5,6 @@
     <button class="button button-clear button-primary" ng-click="addMaterial()">Add</button>
   </ion-header-bar>
   <ion-content class="padding">
-    <ion-toggle toggle-class="toggle-calm" ng-repeat="material in materials">{{material.name}}</ion-toggle>
+    <ion-toggle toggle-class="toggle-calm" checked="true" ng-repeat="material in materials">{{material.name}}</ion-toggle>
   </ion-content>
 </ion-modal-view>

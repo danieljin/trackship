@@ -76,7 +76,7 @@ angular.module('trackship.controllers', [])
 
   $scope.showModal = function(id) {
     $http({
-      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + id + '/materials',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + id + '/materials/user/' + $scope.token,
     }).
     success(function(data, status, headers, config) {
       $scope.materials = data;
