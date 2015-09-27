@@ -9,7 +9,7 @@
             <div class="item item-divider">
               Notification History
             </div>
-            <ion-item ng-if="notifications.length == 0">
+            <ion-item ng-if="notifications.length == 0" class="item-text-wrap">
               There are no notifications at this time.
             </ion-item>
             <ion-item ng-if="notifications.length > 0" ng-repeat="notification in notifications">
