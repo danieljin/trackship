@@ -6,14 +6,14 @@
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list can-swipe="true">
-      <ion-item ng-class="{'disabled':!subscribed}" ng-repeat="material in materials">
+      <ion-item ng-repeat="material in materials" ng-class="{'disabled':!material.subscribed}" >
         {{material.name}}
         <ion-option-button class="button-stable"
-           ng-click="subscribeMaterial(material.id)" ng-if="!subscribed">
+           ng-click="subscribeMaterial(material.id)" ng-if="!material.subscribed">
           Subscribe
         </ion-option-button>
         <ion-option-button class="button-stable"
-           ng-click="unsubscribeMaterial(material.id)" ng-if="subscribed">
+           ng-click="unsubscribeMaterial(material.id)" ng-if="material.subscribed">
           Unsubscribe
         </ion-option-button>
         <ion-option-button class="button-positive"

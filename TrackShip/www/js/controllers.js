@@ -183,18 +183,22 @@ angular.module('trackship.controllers', [])
     });
   };
 })
-.controller('SubscriptionsCtrl', function($scope, $http) {
+.controller('SubscriptionsCtrl', function($scope, $http, $ionicPopup) {
   $scope.materials = [];
 
-  $http({
-    url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials/user/' + $scope.token,
-  }).
-  success(function(data, status, headers, config) {
-    $scope.materials = data;
-  }).
-  error(function(data, status, headers, config) {
-    alert(data);
+  $scope.$on('materials-update', function() {
+    $http({
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials/user/' + $scope.token,
+    }).
+    success(function(data, status, headers, config) {
+      $scope.materials = data;
+    }).
+    error(function(data, status, headers, config) {
+      alert(data);
+    });
   });
+
+  $scope.$emit('materials-update');
 
   $scope.addMaterial = function() {
     $ionicPopup.show({
@@ -221,15 +225,7 @@ angular.module('trackship.controllers', [])
               }).
               success(function(data, status, headers, config) {
                 $scope.data.material = "";
-                $http({
-                  url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
-                }).
-                success(function(data, status, headers, config) {
-                  $scope.materials = data;
-                })
-                error(function(data, status, headers, config) {
-                  alert(JSON.stringify(data));
-                });
+                $scope.$emit('materials-update');
               }).
               error(function(data, status, headers, config) {
                 alert('This project does not exist');
@@ -242,4 +238,75 @@ angular.module('trackship.controllers', [])
     });
   }
 
+  $scope.subscribeMaterial = function(id) {
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/subscribe',
+      data: {user_id:$scope.token, material_id:id},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $scope.$emit('materials-update');
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  }
+
+  $scope.unsubscribeMaterial = function(id) {
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/subscribe',
+      data: {user_id:$scope.token, material_id:id},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $scope.$emit('materials-update');
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  }
+
+  $scope.notifyMaterial = function(id, name) {
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/notify',
+      data: {
+        project_id:$scope.project_id,
+        material_id:id,
+        message:name + " has arrived."
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $scope.$emit('materials-update');
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  }
+
+  $scope.removeMaterial = function(id) {
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
+      data: {name:$scope.data.material},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $scope.$emit('materials-update');
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+    });
+  }
 });
