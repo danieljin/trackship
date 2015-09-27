@@ -1,5 +1,5 @@
 angular.module('trackship.controllers', [])
-.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log) {
+.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $ionicHistory, $log, $http, $location) {
   // Handles incoming device tokens
   $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
     alert("Successfully registered token " + data.token);
@@ -7,33 +7,19 @@ angular.module('trackship.controllers', [])
     $scope.token = data.token;
   });
 
-  // Identifies a user with the Ionic User service
-  $scope.identifyUser = function() {
-    $log.info('Ionic User: Identifying with Ionic User service');
+  $log.info('Ionic User: Identifying with Ionic User service');
 
-    var user = $ionicUser.get();
-    if(!user.user_id) {
-      // Set your user_id here, or generate a random one.
-      user.user_id = $ionicUser.generateGUID();
-    };
-
-    // Add some metadata to your user object.
-    angular.extend(user, {
-      name: 'Ionitron',
-      bio: 'I come from planet Ion'
-    });
-
-    // Identify your user with the Ionic User Service
-    $ionicUser.identify(user).then(function(){
-      $scope.identified = true;
-      alert('Identified user ' + user.name + '\n ID ' + user.user_id);
-    });
+  var user = $ionicUser.get();
+  if(!user.user_id) {
+    // Set your user_id here, or generate a random one.
+    user.user_id = $ionicUser.generateGUID();
   };
 
-  // Registers a device for push notifications and stores its token
-  $scope.pushRegister = function() {
-    $log.info('Ionic Push: Registering user');
+  // Identify your user with the Ionic User Service
+  $ionicUser.identify(user).then(function(){
+    $scope.identified = true;
 
+    $log.info('Ionic Push: Registering user');
     // Register with the Ionic Push service.  All parameters are optional.
     $ionicPush.register({
       canShowAlert: true, //Can pushes show an alert on your screen?
@@ -46,5 +32,30 @@ angular.module('trackship.controllers', [])
         return true;
       }
     });
+  });
+  $scope.project = {};
+  $scope.submit = {disabled:true};
+  $scope.myGoBack = function() {
+    $ionicHistory.goBack();
+  };
+  $scope.toggleSubmit = function() {
+    if ($scope.project.name.length > 0) {
+      $scope.submit.disabled = false;
+    } else {
+      $scope.submit.disabled = true;
+    };
+  }
+  $scope.createProject = function() {
+    $http.post('http://ec2-54-237-22-83.compute-1.amazonaws.com/projects', {name:$scope.project.name}).
+      then(function(response) {
+        $http.post('http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects', {project_id:response.data.project_id}).
+          then(function(response) {
+            $location.path("/landing");
+          }, function(response) {
+            alert(response);
+          });
+      }, function(response) {
+        alert(response);
+      });
   };
 });

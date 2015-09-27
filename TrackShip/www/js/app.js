@@ -31,7 +31,7 @@ angular.module('trackship', ['ionic','ionic.service.core','ionic.service.push','
     })
     .state('newproject', {
       url: "/projects/new",
-      templateUrl: "templates/new-project.html"
+      templateUrl: "templates/new-project.html",
     })
     .state('joinproject', {
       url: "/projects/join",

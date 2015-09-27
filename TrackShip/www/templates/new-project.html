@@ -2,15 +2,15 @@
   <ion-content scroll="false">
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" placeholder="Project Name">
+        <input type="text" placeholder="Project Name" ng-model="project.name" ng-change="toggleSubmit()">
       </label>
       <br>
-      <a class="button button-block button-balanced">
+      <button ng-disabled="submit.disabled" ng-click="createProject()" class="button button-block button-balanced" >
         Create Project
-      </a>
-      <a href="#/landing" class="button button-block button-assertive">
+      </button>
+      <button ng-click="myGoBack()" class="button button-block button-assertive">
         Cancel
-      </a>
+      </button>
     </div>
-  </ion-content> 
+  </ion-content>
 </ion-view>
