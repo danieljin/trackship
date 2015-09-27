@@ -147,10 +147,11 @@ angular.module('trackship.controllers', [])
                 }
               }).
               success(function(data, status, headers, config) {
-                //success
+                $ionicLoading.hide();
               }).
               error(function(data, status, headers, config) {
                 alert('Failed to send notification');
+                $ionicLoading.hide();
               });
               return $scope.data.wifi;
             }
@@ -363,6 +364,7 @@ angular.module('trackship.controllers', [])
               }).
               error(function(data, status, headers, config) {
                 alert('This project does not exist');
+                $ionicLoading.hide();
               });
               return $scope.data.wifi;
             }
