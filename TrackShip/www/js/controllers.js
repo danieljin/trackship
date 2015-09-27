@@ -294,19 +294,23 @@ angular.module('trackship.controllers', [])
   }
 
   $scope.removeMaterial = function(id) {
-    $http({
-      method: 'POST',
-      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
-      data: {name:$scope.data.material},
-      headers: {
-        'Content-Type': 'application/json'
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Deleting Material',
+      template: 'Are you sure you want to delete this material?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        $http({
+          method: 'DELETE',
+          url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/material/' + id,
+        }).
+        success(function(data, status, headers, config) {
+          $scope.$emit('materials-update');
+        }).
+        error(function(data, status, headers, config) {
+          alert(JSON.stringify(data));
+        });
       }
-    }).
-    success(function(data, status, headers, config) {
-      $scope.$emit('materials-update');
-    }).
-    error(function(data, status, headers, config) {
-      alert(JSON.stringify(data));
     });
   }
 });
