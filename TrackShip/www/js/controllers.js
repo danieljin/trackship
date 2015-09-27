@@ -1,5 +1,5 @@
 angular.module('trackship.controllers', [])
-.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal) {
+.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal, $ionicPopup) {
   // $ionicLoading.show({
   //   template: 'Loading...'
   // });
@@ -48,19 +48,67 @@ angular.module('trackship.controllers', [])
   });
 
   $scope.showModal = function(id) {
-    $ionicModal.fromTemplateUrl('templates/subscriptions.html', {
-      scope: $scope
-    }).then(function(modal) {
-      $scope.modal = modal;
-      modal.show();
+    $http({
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + id + '/materials',
+    }).
+    success(function(data, status, headers, config) {
+      $scope.materials = data;
+
+      $ionicModal.fromTemplateUrl('templates/subscriptions.html', {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        modal.show();
+        $scope.project_id = id;
+      });
+    }).
+    error(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
     });
   }
-  $scope.projects = [
-    {
-      "id": "de428ec3-9bba-43f2-898f-c631fb325cac",
-      "name": "djin"
-    }
-  ];
+
+  $scope.addMaterial = function() {
+    $ionicPopup.show({
+      template: '<input type="text" ng-model="data.material">',
+      title: 'Enter Material Name',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: '<b>Save</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            if (!$scope.data.material) {
+              //don't allow the user to close unless he enters wifi password
+              e.preventDefault();
+            } else {
+              $http({
+                method: 'POST',
+                url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
+                data: {name:$scope.data.material},
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }).
+              success(function(data, status, headers, config) {
+                $location.path("/landing");
+                $scope.data.material = null;
+                $scope.modal.close();
+              }).
+              error(function(data, status, headers, config) {
+                alert('This project does not exist');
+              });
+              return $scope.data.wifi;
+            }
+          }
+        }
+      ]
+    });
+  }
+
+  $scope.projects = [{name:'asdasds', id:'0c28f3b4-26df-400c-bcc3-0c936190d564'}];
+  $scope.materials = [];
+  $scope.data = {};
 })
 .controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location) {
   $scope.project = {};
@@ -119,19 +167,19 @@ angular.module('trackship.controllers', [])
     };
   }
   $scope.joinProject = function() {
-      $http({
-        method: 'POST',
-        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-        data: {project_id:$scope.project.id},
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).
-      success(function(data, status, headers, config) {
-        $location.path("/landing");
-      }).
-      error(function(data, status, headers, config) {
-        alert('This project does not exist');
-      });
+    $http({
+      method: 'POST',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      data: {project_id:$scope.project.id},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).
+    success(function(data, status, headers, config) {
+      $location.path("/landing");
+    }).
+    error(function(data, status, headers, config) {
+      alert('This project does not exist');
+    });
   };
 });
