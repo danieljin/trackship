@@ -111,7 +111,44 @@ angular.module('trackship.controllers', [])
     }
 
     $scope.notifyProject = function(id) {
-      
+      $ionicPopup.show({
+        template: '<input type="text" ng-model="data.notify">',
+        title: 'Notify All Users on Project',
+        scope: $scope,
+        buttons: [{
+          text: 'Cancel'
+        }, {
+          text: '<b>Notify</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            if (!$scope.data.notify) {
+              e.preventDefault();
+            } else {
+              $ionicLoading.show({
+                template: 'Loading...'
+              });
+              $http({
+                method: 'POST',
+                url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/notify',
+                data: {
+                  project_id: id,
+                  message: $scope.data.notify
+                },
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }).
+              success(function(data, status, headers, config) {
+                //success
+              }).
+              error(function(data, status, headers, config) {
+                alert('Failed to send notification');
+              });
+              return $scope.data.wifi;
+            }
+          }
+        }]
+      });
     }
 
     $scope.removeProject = function(id) {
