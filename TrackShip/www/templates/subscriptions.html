@@ -1,10 +1,30 @@
-<ion-modal-view>
+<ion-modal-view ng-controller="SubscriptionsCtrl">
   <ion-header-bar class="bar bar-header bar-positive">
     <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
     <h1 class="title">Subscriptions</h1>
     <button class="button button-clear button-primary" ng-click="addMaterial()">Add</button>
   </ion-header-bar>
   <ion-content class="padding">
-    <ion-toggle toggle-class="toggle-calm" checked="true" ng-repeat="material in materials">{{material.name}}</ion-toggle>
+    <ion-list can-swipe="true">
+      <ion-item ng-class="{'disabled':!subscribed}" ng-repeat="material in materials">
+        {{material.name}}
+        <ion-option-button class="button-stable"
+           ng-click="subscribeMaterial(material.id)" ng-if="!subscribed">
+          Subscribe
+        </ion-option-button>
+        <ion-option-button class="button-stable"
+           ng-click="unsubscribeMaterial(material.id)" ng-if="subscribed">
+          Unsubscribe
+        </ion-option-button>
+        <ion-option-button class="button-positive"
+           ng-click="notifyMaterial(material.id, material.name)">
+          Notify
+        </ion-option-button>
+        <ion-option-button class="button-assertive"
+           ng-click="removeMaterial(material.id)">
+          Remove
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-modal-view>

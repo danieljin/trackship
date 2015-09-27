@@ -33,7 +33,7 @@
             <div class="item item-divider">
               Subscriptions
             </div>
-              <ion-list can-swipe="true">
+            <ion-list can-swipe="true">
               <ion-item ng-repeat="project in projects" ng-click="showModal(project.id)">
                 {{project.name}}
                 <ion-option-button class="button-assertive"
@@ -41,7 +41,7 @@
                   Remove
                 </ion-option-button>
               </ion-item>
-          </ion-list>
+            </ion-list>
           </div>
         </ion-content>
       </ion-tab>
