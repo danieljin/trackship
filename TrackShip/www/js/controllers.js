@@ -3,44 +3,6 @@ angular.module('trackship.controllers', [])
   // $ionicLoading.show({
   //   template: 'Loading...'
   // });
-  // Handles incoming device tokens
-  $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-    $log.info('Ionic Push: Got token ', data.token, data.platform);
-    $scope.token = data.token;
-
-    $http({
-      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-    }).
-    success(function(data, status, headers, config) {
-      $scope.projects = data;
-    }).
-    error(function(data, status, headers, config) {
-      alert(data);
-    });
-
-    $http({
-      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
-    }).
-    success(function(data, status, headers, config) {
-      $scope.notifications = data;
-    }).
-    error(function(data, status, headers, config) {
-      alert(data);
-    });
-  });
-
-  $rootScope.$on('project-added', function() {
-      $http({
-        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-      }).
-      success(function(data, status, headers, config) {
-        $scope.projects = data;
-      }).
-      error(function(data, status, headers, config) {
-        alert(data);
-      });
-  });
-
 
   $log.info('Ionic User: Identifying with Ionic User service');
 
@@ -67,6 +29,36 @@ angular.module('trackship.controllers', [])
     });
   });
 
+  // Handles incoming device tokens
+  $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+    $log.info('Ionic Push: Got token ', data.token, data.platform);
+    $scope.token = data.token;
+
+    $rootScope.$emit('projects-update');
+
+    $http({
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
+    }).
+    success(function(data, status, headers, config) {
+      $scope.notifications = data;
+    }).
+    error(function(data, status, headers, config) {
+      alert(data);
+    });
+  });
+
+  $rootScope.$on('projects-update', function() {
+      $http({
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      }).
+      success(function(data, status, headers, config) {
+        $scope.projects = data;
+      }).
+      error(function(data, status, headers, config) {
+        alert(data);
+      });
+  });
+
   $scope.removeProject = function(id) {
     $http({
       method: 'DELETE',
@@ -81,7 +73,7 @@ angular.module('trackship.controllers', [])
         template: 'Project has been removed.',
         duration: 1000
       });
-      $rootScope.$emit('project-added');
+      $rootScope.$emit('projects-update');
     }).
     error(function(data, status, headers, config) {
       alert(JSON.stringify(data));
@@ -104,7 +96,7 @@ angular.module('trackship.controllers', [])
   $scope.project_id;
   $scope.data = {};
 })
-.controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
+.controller('AddProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
   $scope.project = {};
   $scope.submit = {disabled:true};
   $scope.myGoBack = function() {
@@ -138,7 +130,7 @@ angular.module('trackship.controllers', [])
       success(function(data, status, headers, config) {
         $scope.project = {};
         $location.path("/landing");
-        $rootScope.$emit('project-added');
+        $rootScope.$emit('projects-update');
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -148,20 +140,7 @@ angular.module('trackship.controllers', [])
       alert(JSON.stringify(data));
     });
   };
-})
-.controller('JoinProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
-  $scope.project = {};
-  $scope.submit = {disabled:true};
-  $scope.myGoBack = function() {
-    $ionicHistory.goBack();
-  };
-  $scope.toggleSubmit = function() {
-    if ($scope.project.id.length > 0) {
-      $scope.submit.disabled = false;
-    } else {
-      $scope.submit.disabled = true;
-    };
-  }
+
   $scope.joinProject = function() {
     $http({
       method: 'POST',
@@ -174,7 +153,7 @@ angular.module('trackship.controllers', [])
     success(function(data, status, headers, config) {
       $scope.project = {};
       $location.path("/landing");
-      $rootScope.$emit('project-added');
+      $rootScope.$emit('projects-update');
     }).
     error(function(data, status, headers, config) {
       alert('This project does not exist');
