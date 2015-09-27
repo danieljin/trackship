@@ -148,6 +148,7 @@ angular.module('trackship.controllers', [])
               }).
               success(function(data, status, headers, config) {
                 $ionicLoading.hide();
+                $scope.data.material = "";
               }).
               error(function(data, status, headers, config) {
                 alert('Failed to send notification');
