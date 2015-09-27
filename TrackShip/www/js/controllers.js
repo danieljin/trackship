@@ -24,7 +24,7 @@ angular.module('trackship.controllers', [])
       canPlaySound: true, //Can notifications play a sound?
       canRunActionsOnWake: true, //Can run actions outside the app,
       onNotification: function(notification) {
-        alert(JSON.stringify(notification));
+        alert(JSON.stringify(notification.body));
       }
     });
   });
@@ -43,7 +43,7 @@ angular.module('trackship.controllers', [])
       $scope.notifications = data;
     }).
     error(function(data, status, headers, config) {
-      alert(data);
+      alert(JSON.stringify(data));
     });
   });
 
@@ -55,7 +55,7 @@ angular.module('trackship.controllers', [])
         $scope.projects = data;
       }).
       error(function(data, status, headers, config) {
-        alert(data);
+        alert(JSON.stringify(data));
       });
   });
 
@@ -91,8 +91,8 @@ angular.module('trackship.controllers', [])
     });
   }
 
-
-  $scope.projects = [{name:'asdasds', id:'0c28f3b4-26df-400c-bcc3-0c936190d564'}];
+  $scope.notifications = [];
+  $scope.projects = [];
   $scope.project_id;
   $scope.data = {};
 })
@@ -171,7 +171,7 @@ angular.module('trackship.controllers', [])
       $scope.materials = data;
     }).
     error(function(data, status, headers, config) {
-      alert(data);
+      alert(JSON.stringify(data));
     });
   });
 

@@ -7,7 +7,10 @@
             <div class="item item-divider">
               Notifications
             </div>
-            <ion-item ng-repeat="notification in notifications">
+            <ion-item ng-if="notifications.length == 0">
+              There are no notifications at this time.
+            </ion-item>
+            <ion-item ng-if="notifications.length > 0" ng-repeat="notification in notifications">
               {{notification.message}}
             </ion-item>
           </div>
@@ -34,7 +37,10 @@
               Subscriptions
             </div>
             <ion-list can-swipe="true">
-              <ion-item ng-repeat="project in projects" ng-click="showModal(project.id)">
+              <ion-item ng-if="projects.length == 0">
+                Please start a new project or join an existing project.
+              </ion-item>
+              <ion-item ng-if="projects.length > 0" ng-repeat="project in projects" ng-click="showModal(project.id)">
                 {{project.name}}
                 <ion-option-button class="button-assertive"
                    ng-click="removeProject(project.id)">
