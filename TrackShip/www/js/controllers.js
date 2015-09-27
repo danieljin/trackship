@@ -89,12 +89,10 @@ angular.module('trackship.controllers', [])
       success(function(data, status, headers, config) {
         $scope.notifications = data;
         $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply();
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
         $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply();
       });
     }
 
@@ -105,12 +103,10 @@ angular.module('trackship.controllers', [])
       success(function(data, status, headers, config) {
         $scope.projects = data;
         $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply();
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
         $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply();
       });
     }
 
