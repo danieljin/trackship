@@ -91,9 +91,16 @@ angular.module('trackship.controllers', [])
                 }
               }).
               success(function(data, status, headers, config) {
-                $location.path("/landing");
-                $scope.data.material = null;
-                $scope.modal.close();
+                $scope.data.material = "";
+                $http({
+                  url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
+                }).
+                success(function(data, status, headers, config) {
+                  $scope.materials = data;
+                })
+                error(function(data, status, headers, config) {
+                  alert(JSON.stringify(data));
+                });
               }).
               error(function(data, status, headers, config) {
                 alert('This project does not exist');
@@ -133,6 +140,7 @@ angular.module('trackship.controllers', [])
       }
     }).
     success(function(data, status, headers, config) {
+      $scope.project = {};
       $http({
         method: 'POST',
         url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
@@ -142,7 +150,16 @@ angular.module('trackship.controllers', [])
         }
       }).
       success(function(data, status, headers, config) {
-        $location.path("/landing");
+        $http({
+          url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+        }).
+        success(function(data, status, headers, config) {
+          $scope.projects = data;
+          $location.path("/landing");
+        }).
+        error(function(data, status, headers, config) {
+          alert(data);
+        });
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -176,7 +193,17 @@ angular.module('trackship.controllers', [])
       }
     }).
     success(function(data, status, headers, config) {
-      $location.path("/landing");
+      $scope.project = {};
+      $http({
+        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+      }).
+      success(function(data, status, headers, config) {
+        $scope.projects = data;
+        $location.path("/landing");
+      }).
+      error(function(data, status, headers, config) {
+        alert(data);
+      });
     }).
     error(function(data, status, headers, config) {
       alert('This project does not exist');
