@@ -29,11 +29,9 @@ angular.module('trackship.controllers', [])
     error(function(data, status, headers, config) {
       alert(data);
     });
-
   });
 
-  $scope.$on('$locationChangeStart', function(event, next, current) {
-    if (next.match('/landing')) {
+  $rootScope.$on('project-added', function() {debugger;
       $ionicLoading.show({
         template: 'Loading...'
       });
@@ -48,8 +46,8 @@ angular.module('trackship.controllers', [])
       error(function(data, status, headers, config) {
         alert(data);
       });
-    }
   });
+
 
   $log.info('Ionic User: Identifying with Ionic User service');
 
@@ -148,7 +146,7 @@ angular.module('trackship.controllers', [])
   $scope.materials = [];
   $scope.data = {};
 })
-.controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location) {
+.controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
   $scope.project = {};
   $scope.submit = {disabled:true};
   $scope.myGoBack = function() {
@@ -182,6 +180,7 @@ angular.module('trackship.controllers', [])
       success(function(data, status, headers, config) {
         $scope.project = {};
         $location.path("/landing");
+        $rootScope.$emit('project-added');
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -192,7 +191,7 @@ angular.module('trackship.controllers', [])
     });
   };
 })
-.controller('JoinProjectCtrl', function($scope, $ionicHistory, $http, $location) {
+.controller('JoinProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
   $scope.project = {};
   $scope.submit = {disabled:true};
   $scope.myGoBack = function() {
@@ -217,6 +216,7 @@ angular.module('trackship.controllers', [])
     success(function(data, status, headers, config) {
       $scope.project = {};
       $location.path("/landing");
+      $rootScope.$emit('project-added');
     }).
     error(function(data, status, headers, config) {
       alert('This project does not exist');
