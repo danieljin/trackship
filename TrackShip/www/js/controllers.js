@@ -1,10 +1,23 @@
 angular.module('trackship.controllers', [])
-.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log) {
+.controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal) {
+  // $ionicLoading.show({
+  //   template: 'Loading...'
+  // });
   // Handles incoming device tokens
   $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-    alert("Successfully registered token " + data.token);
     $log.info('Ionic Push: Got token ', data.token, data.platform);
     $scope.token = data.token;
+
+    $http({
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+    }).
+    success(function(data, status, headers, config) {
+      alert(JSON.stringify(data));
+      $scope.projects = data;
+    }).
+    error(function(data, status, headers, config) {
+      alert(data);
+    });
   });
 
   $log.info('Ionic User: Identifying with Ionic User service');
@@ -33,6 +46,21 @@ angular.module('trackship.controllers', [])
       }
     });
   });
+
+  $scope.showModal = function(id) {
+    $ionicModal.fromTemplateUrl('templates/subscriptions.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+      modal.show();
+    });
+  }
+  $scope.projects = [
+    {
+      "id": "de428ec3-9bba-43f2-898f-c631fb325cac",
+      "name": "djin"
+    }
+  ];
 })
 .controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location) {
   $scope.project = {};

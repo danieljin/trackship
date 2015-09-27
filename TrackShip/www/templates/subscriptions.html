@@ -1,17 +1,9 @@
-<ion-view title="Subscriptions" hide-back-button="false">
-  <ion-content scroll="true">
-    <ul class="list">
-      <!--Begin item list-->
-      <li class="item item-toggle">
-         Material Name
-         <label class="toggle toggle-balanced">
-           <input type="checkbox">
-           <div class="track">
-             <div class="handle"></div>
-           </div>
-         </label>
-      </li>
-      <!--End item list-->
-    </ul>
-  </ion-content> 
-</ion-view>
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-positive">
+    <h1 class="title">Subscriptions</h1>
+    <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-toggle ng-model="airplaneMode" toggle-class="toggle-calm" ng-repeat="project in projects">{{project.name}}</ion-toggle>
+  </ion-content>
+</ion-modal-view>
