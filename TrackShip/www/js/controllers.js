@@ -12,7 +12,6 @@ angular.module('trackship.controllers', [])
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
     }).
     success(function(data, status, headers, config) {
-      alert(JSON.stringify(data));
       $scope.projects = data;
     }).
     error(function(data, status, headers, config) {
@@ -23,7 +22,6 @@ angular.module('trackship.controllers', [])
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
     }).
     success(function(data, status, headers, config) {
-      alert(JSON.stringify(data));
       $scope.notifications = data;
     }).
     error(function(data, status, headers, config) {
