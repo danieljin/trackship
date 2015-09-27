@@ -44,14 +44,14 @@
               </ion-item>
               <ion-item ng-if="projects.length > 0" ng-repeat="project in projects" ng-click="showModal(project.id)">
                 {{project.name}}
-                <ion-option-button class="button-assertive" ng-click="getCode(project.id)">
+                <ion-option-button class="button-stable" ng-click="getCode(project.id)">
                   Get Code
                 </ion-option-button>
                 <ion-option-button class="button-positive" ng-click="notifyProject(project.id)">
                   Notify
                 </ion-option-button>
                 <ion-option-button class="button-assertive" ng-click="removeProject(project.id)">
-                  Unsubscribe
+                  Remove
                 </ion-option-button>
               </ion-item>
             </ion-list>

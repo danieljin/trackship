@@ -107,7 +107,15 @@ angular.module('trackship.controllers', [])
     }
 
     $scope.getCode = function(id) {
-
+      $scope.data.project_id = id;
+      $ionicPopup.show({
+        template: '<input type="text" ng-readonly="true" ng-model="data.project_id">',
+        title: 'Project ID',
+        scope: $scope,
+        buttons: [{
+          text: 'Dismiss'
+        }]
+      });
     }
 
     $scope.notifyProject = function(id) {
@@ -203,7 +211,7 @@ angular.module('trackship.controllers', [])
     $scope.project_id;
     $scope.data = {};
   })
-  .controller('AddProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope, $ionicLoading) {
+  .controller('NewProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope, $ionicLoading) {
     $scope.project = {};
     $scope.submit = {
       disabled: true
@@ -250,12 +258,30 @@ angular.module('trackship.controllers', [])
         }).
         error(function(data, status, headers, config) {
           alert(JSON.stringify(data));
+          $ionicLoading.hide();
         });
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
+        $ionicLoading.hide();
       });
     };
+  })
+  .controller('JoinProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope, $ionicLoading) {
+    $scope.project = {};
+    $scope.submit = {
+      disabled: true
+    };
+    $scope.myGoBack = function() {
+      $ionicHistory.goBack();
+    };
+    $scope.toggleSubmit = function() {
+      if ($scope.project.id.length > 0) {
+        $scope.submit.disabled = false;
+      } else {
+        $scope.submit.disabled = true;
+      };
+    }
 
     $scope.joinProject = function() {
       $ionicLoading.show({
@@ -278,6 +304,7 @@ angular.module('trackship.controllers', [])
       }).
       error(function(data, status, headers, config) {
         alert('This project does not exist');
+        $ionicLoading.hide();
       });
     };
   })
