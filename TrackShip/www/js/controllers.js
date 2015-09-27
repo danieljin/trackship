@@ -257,8 +257,8 @@ angular.module('trackship.controllers', [])
 
   $scope.unsubscribeMaterial = function(id) {
     $http({
-      method: 'POST',
-      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/subscribe',
+      method: 'DELETE',
+      url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/unsubscribe',
       data: {user_id:$scope.token, material_id:id},
       headers: {
         'Content-Type': 'application/json'
