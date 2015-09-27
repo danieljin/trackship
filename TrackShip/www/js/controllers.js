@@ -25,6 +25,7 @@ angular.module('trackship.controllers', [])
         canRunActionsOnWake: true, //Can run actions outside the app,
         onNotification: function(notification) {
           alert(JSON.stringify(notification.body));
+          $scope.refreshNotifications();
         }
       });
     });
