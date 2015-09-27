@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('trackship', ['ionic', 'ionic.service.core', 'ionic.service.push', 'ngCordova', 'trackship.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicLoading) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -15,6 +15,9 @@ angular.module('trackship', ['ionic', 'ionic.service.core', 'ionic.service.push'
       if (window.StatusBar) {
         StatusBar.styleDefault();
       }
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
     });
   })
   .config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {

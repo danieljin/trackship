@@ -7,13 +7,13 @@
           </ion-refresher>
           <div class="list card">
             <div class="item item-divider">
-              Notifications
+              Notification History
             </div>
             <ion-item ng-if="notifications.length == 0">
               There are no notifications at this time.
             </ion-item>
             <ion-item ng-if="notifications.length > 0" ng-repeat="notification in notifications">
-              {{notification.message}}
+              {{notification.message}} <div class="timestamp"> {{notification.timestamp | date:'short'}} </div>
             </ion-item>
           </div>
         </ion-content>
@@ -39,13 +39,19 @@
               Subscriptions
             </div>
             <ion-list can-swipe="true">
-              <ion-item ng-if="projects.length == 0">
+              <ion-item ng-if="projects.length == 0" class="item-text-wrap">
                 Please start a new project or join an existing project.
               </ion-item>
               <ion-item ng-if="projects.length > 0" ng-repeat="project in projects" ng-click="showModal(project.id)">
                 {{project.name}}
+                <ion-option-button class="button-assertive" ng-click="getCode(project.id)">
+                  Get Code
+                </ion-option-button>
+                <ion-option-button class="button-positive" ng-click="notifyProject(project.id)">
+                  Notify
+                </ion-option-button>
                 <ion-option-button class="button-assertive" ng-click="removeProject(project.id)">
-                  Remove
+                  Unsubscribe
                 </ion-option-button>
               </ion-item>
             </ion-list>

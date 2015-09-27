@@ -1,9 +1,5 @@
 angular.module('trackship.controllers', [])
   .controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal, $ionicPopup, $ionicPlatform) {
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-
     $log.info('Ionic User: Identifying with Ionic User service');
 
     var user = $ionicUser.get();
@@ -110,32 +106,47 @@ angular.module('trackship.controllers', [])
       });
     }
 
-    $scope.removeProject = function(id) {
-      $ionicLoading.show({
-        template: 'Loading...'
-      });
+    $scope.getCode = function(id) {
 
-      $http({
-        method: 'DELETE',
-        url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
-        data: {
-          project_id: id
-        },
-        headers: {
-          'Content-Type': 'application/json'
+    }
+
+    $scope.notifyProject = function(id) {
+      
+    }
+
+    $scope.removeProject = function(id) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Deleting Project',
+        template: 'Are you sure you want to unsubscribe from this Project?'
+      });
+      confirmPopup.then(function(res) {
+        if (res) {
+          $ionicLoading.show({
+            template: 'Loading...'
+          });
+          $http({
+            method: 'DELETE',
+            url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
+            data: {
+              project_id: id
+            },
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).
+          success(function(data, status, headers, config) {
+            $ionicLoading.hide();
+            $ionicLoading.show({
+              template: 'Project has been removed.',
+              duration: 1000
+            });
+            $rootScope.$emit('projects-update');
+          }).
+          error(function(data, status, headers, config) {
+            $ionicLoading.hide();
+            alert(JSON.stringify(data));
+          });
         }
-      }).
-      success(function(data, status, headers, config) {
-        $ionicLoading.hide();
-        $ionicLoading.show({
-          template: 'Project has been removed.',
-          duration: 1000
-        });
-        $rootScope.$emit('projects-update');
-      }).
-      error(function(data, status, headers, config) {
-        $ionicLoading.hide();
-        alert(JSON.stringify(data));
       });
     }
 
@@ -369,7 +380,7 @@ angular.module('trackship.controllers', [])
     $scope.removeMaterial = function(id) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Deleting Material',
-        template: 'Are you sure you want to delete this material? Other users may be subscribed to it.'
+        template: 'Are you sure you want to delete this material for all users? This will also remove all notification history associated with it.'
       });
       confirmPopup.then(function(res) {
         if (res) {
