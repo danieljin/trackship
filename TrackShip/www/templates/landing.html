@@ -24,12 +24,10 @@
               New Subscriptions
             </div>
             <a href="#/projects/new" class="item item-icon-left">
-            <i class="icon ion-edit"></i>
-            Start a new project
+              <i class="icon ion-edit"></i> Start a new project
             </a>
             <a href="#/projects/join" class="item item-icon-left">
-            <i class="icon ion-ios-plus"></i>
-            Join an existing project
+              <i class="icon ion-ios-plus"></i> Join an existing project
             </a>
           </div>
           <div class="card">
@@ -42,8 +40,7 @@
               </ion-item>
               <ion-item ng-if="projects.length > 0" ng-repeat="project in projects" ng-click="showModal(project.id)">
                 {{project.name}}
-                <ion-option-button class="button-assertive"
-                   ng-click="removeProject(project.id)">
+                <ion-option-button class="button-assertive" ng-click="removeProject(project.id)">
                   Remove
                 </ion-option-button>
               </ion-item>
