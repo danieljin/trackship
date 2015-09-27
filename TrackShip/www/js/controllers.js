@@ -1,8 +1,8 @@
 angular.module('trackship.controllers', [])
 .controller('MainCtrl', function($scope, $rootScope, $ionicUser, $ionicPush, $log, $ionicLoading, $http, $ionicModal, $ionicPopup) {
-  // $ionicLoading.show({
-  //   template: 'Loading...'
-  // });
+  $ionicLoading.show({
+    template: 'Loading...'
+  });
 
   $log.info('Ionic User: Identifying with Ionic User service');
 
@@ -34,13 +34,12 @@ angular.module('trackship.controllers', [])
     $log.info('Ionic Push: Got token ', data.token, data.platform);
     $scope.token = data.token;
 
-    $rootScope.$emit('projects-update');
-
     $http({
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/notifications',
     }).
     success(function(data, status, headers, config) {
       $scope.notifications = data;
+      $rootScope.$emit('projects-update');
     }).
     error(function(data, status, headers, config) {
       alert(JSON.stringify(data));
@@ -48,11 +47,15 @@ angular.module('trackship.controllers', [])
   });
 
   $rootScope.$on('projects-update', function() {
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
       $http({
         url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
       }).
       success(function(data, status, headers, config) {
         $scope.projects = data;
+        $ionicLoading.hide();
       }).
       error(function(data, status, headers, config) {
         alert(JSON.stringify(data));
@@ -60,6 +63,10 @@ angular.module('trackship.controllers', [])
   });
 
   $scope.removeProject = function(id) {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+
     $http({
       method: 'DELETE',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
@@ -69,6 +76,7 @@ angular.module('trackship.controllers', [])
       }
     }).
     success(function(data, status, headers, config) {
+      $ionicLoading.hide();
       $ionicLoading.show({
         template: 'Project has been removed.',
         duration: 1000
@@ -96,7 +104,7 @@ angular.module('trackship.controllers', [])
   $scope.project_id;
   $scope.data = {};
 })
-.controller('AddProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope) {
+.controller('AddProjectCtrl', function($scope, $ionicHistory, $http, $location, $rootScope, $ionicLoading) {
   $scope.project = {};
   $scope.submit = {disabled:true};
   $scope.myGoBack = function() {
@@ -110,6 +118,9 @@ angular.module('trackship.controllers', [])
     };
   }
   $scope.createProject = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       method: 'POST',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/projects',
@@ -142,6 +153,9 @@ angular.module('trackship.controllers', [])
   };
 
   $scope.joinProject = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       method: 'POST',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/user/' + $scope.token + '/projects',
@@ -160,15 +174,19 @@ angular.module('trackship.controllers', [])
     });
   };
 })
-.controller('SubscriptionsCtrl', function($scope, $http, $ionicPopup) {
+.controller('SubscriptionsCtrl', function($scope, $http, $ionicPopup, $ionicLoading) {
   $scope.materials = [];
 
   $scope.$on('materials-update', function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials/user/' + $scope.token,
     }).
     success(function(data, status, headers, config) {
       $scope.materials = data;
+      $ionicLoading.hide();
     }).
     error(function(data, status, headers, config) {
       alert(JSON.stringify(data));
@@ -189,9 +207,11 @@ angular.module('trackship.controllers', [])
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.data.material) {
-              //don't allow the user to close unless he enters wifi password
               e.preventDefault();
             } else {
+              $ionicLoading.show({
+                template: 'Loading...'
+              });
               $http({
                 method: 'POST',
                 url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/project/' + $scope.project_id + '/materials',
@@ -216,6 +236,9 @@ angular.module('trackship.controllers', [])
   }
 
   $scope.subscribeMaterial = function(id) {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       method: 'POST',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/subscribe',
@@ -233,6 +256,9 @@ angular.module('trackship.controllers', [])
   }
 
   $scope.unsubscribeMaterial = function(id) {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       method: 'DELETE',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/unsubscribe',
@@ -250,6 +276,9 @@ angular.module('trackship.controllers', [])
   }
 
   $scope.notifyMaterial = function(id, name) {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     $http({
       method: 'POST',
       url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/notify',
@@ -273,10 +302,13 @@ angular.module('trackship.controllers', [])
   $scope.removeMaterial = function(id) {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Deleting Material',
-      template: 'Are you sure you want to delete this material?'
+      template: 'Are you sure you want to delete this material? Other users may be subscribed to it.'
     });
     confirmPopup.then(function(res) {
       if(res) {
+        $ionicLoading.show({
+          template: 'Loading...'
+        });
         $http({
           method: 'DELETE',
           url: 'http://ec2-54-237-22-83.compute-1.amazonaws.com/material/' + id,
